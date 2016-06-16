@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Beanshell Sample</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_code">Java Code</string>
+    <string name="action_run">Run Code</string>
+</resources>
