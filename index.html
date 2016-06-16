@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Beanshelldemo by GeorgeArgyrakis</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Beanshelldemo</h1>
+        <h2>Dynamically extend android apps</h2>
+        <a href="https://github.com/GeorgeArgyrakis/beanshelldemo" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="what-is-beanshell" class="anchor" href="#what-is-beanshell" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is Beanshell?</h1>
+
+<p><a href="http://www.beanshell.org">Beanshell</a> is a small, free, embeddable Java source interpreter with object scripting language features, written in Java. BeanShell dynamically executes standard Java syntax and extends it with common scripting conveniences such as loose types, commands, and method closures like those in Perl and JavaScript.</p>
+
+<h2>
+<a id="scripting-features" class="anchor" href="#scripting-features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Scripting features</h2>
+
+<ul>
+<li>Optionally typed variables.</li>
+<li>Scripted methods with optionally typed arguments and return values</li>
+<li>Scripted objects (method closures)</li>
+<li>Scripted interfaces and event handlers.</li>
+<li>Convenience syntax for working with JavaBean properties, hashtables, and primitive wrapper types.</li>
+<li>Auto-allocation of variables to emulate Java properties files.</li>
+<li>Extensible set of utility and shell-like commands</li>
+<li>Dynamic classpath management including find grained class reloading</li>
+<li>Dynamic command loading and user command path</li>
+<li>Sophisticated namespace and callstack management</li>
+<li>Detailed error reporting</li>
+</ul>
+
+<h2>
+<a id="uses" class="anchor" href="#uses" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Uses</h2>
+
+<ul>
+<li>Scripting extension for applications - Allow your applications to be extended via scripts in an intuitive and simple way.</li>
+<li>Macro Languages - Generate scripts as macros and execute them live in your VM easily.</li>
+<li>Expression evaluator for scientific, financial apps and rules engines - evaluate complex expressions with conditions and loops.</li>
+<li>Remote debugging - Embed a live, remotely accessible shell / command line in your application with just a few lines of code.</li>
+<li>Use BeanShell declaratively to replace properties files and replace startup config files with real scripts that perform complex initialization and setup with the full Java syntax at their disposal.</li>
+</ul>
+
+<h1>
+<a id="how-to-use-it" class="anchor" href="#how-to-use-it" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to Use it</h1>
+
+<p>The best way to understand the power of beanshell is through an example. Let’s create a sample android app that will execute arbitrary code of user’s choice. <a href="https://github.com/GeorgeArgyrakis/beanshelldemo/">Get in on Github</a></p>
+
+<h2>
+<a id="gradle-setup" class="anchor" href="#gradle-setup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Gradle Setup</h2>
+
+<p>Create a new app and add the following gradle dependency</p>
+
+<p><code>compile 'org.beanshell:bsh:2.0b5'</code></p>
+
+<h2>
+<a id="activity-layout" class="anchor" href="#activity-layout" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Activity Layout</h2>
+
+<p>Create a simply layout with one edit text and one button. 
+The edit text will hold the java code and the button will execute it.
+<img src="http://i.imgur.com/TDB38MJ.png" alt="activity"></p>
+
+<h2>
+<a id="initialize-beanshell" class="anchor" href="#initialize-beanshell" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Initialize beanshell</h2>
+
+<p>First create a new interpreter that will evaluate our scripts:</p>
+
+<p><code>Interpreter interpreter = new Interpreter();</code></p>
+
+<p>Then of the activity we pass any variable we will refer to it directly from script:</p>
+
+<pre><code>interpreter.set("myapp", this); //a reference to activity
+interpreter.set("code", findViewById(R.id.editTextCode));
+interpreter.set("button", findViewById(R.id.buttonRun));
+</code></pre>
+
+<p>Optionally we can enable a server at [device ip]:[portnum] to remotely run commands:</p>
+
+<pre><code>interpreter.set("portnum", 1234); // set port
+interpreter.eval("setAccessibility(true)"); // turn off access restrictions
+interpreter.eval("server(portnum)"); // enable server
+</code></pre>
+
+<h2>
+<a id="run-code" class="anchor" href="#run-code" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Run Code</h2>
+
+<p>Finally, on button click listener we will run the code in edittext:</p>
+
+<p><code>interpreter.eval(javaCode.getText().toString());</code></p>
+
+<h2>
+<a id="sample-code" class="anchor" href="#sample-code" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sample Code</h2>
+
+<p>Following are some samples you can try and run inside the app:</p>
+
+<pre><code>// myapp: variable passed to the interpreter
+import android.widget.Toast;  
+Toast.makeText(myapp, "This is a Toast from beanshell", Toast.LENGTH_SHORT).show();
+
+// code: variable passed to the interpreter
+import android.support.design.widget.Snackbar;
+Snackbar.make(code,"This is a Snackbar from beanshell",Snackbar.LENGTH_LONG).show();
+
+// Run on UI thread`
+code.post(new Runnable() {public void run() {button.setText(\"Changed from code\");} });`
+</code></pre>
+
+<p><img src="http://i.imgur.com/U3yQsta.gif" alt="demo"></p>
+
+<h1>
+<a id="telnet" class="anchor" href="#telnet" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Telnet</h1>
+
+<p>If you have enabled server you can connect and run commands either at http://[device ip]:[portnum] or with telnet at [device ip]:[portnum+1]. I recommend using <a href="http://www.putty.org">putty</a> with Connection Type =Raw.
+<img src="http://i.imgur.com/8WumqvB.png" alt="putty"></p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/GeorgeArgyrakis/beanshelldemo/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/GeorgeArgyrakis/beanshelldemo/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/GeorgeArgyrakis/beanshelldemo"></a> is maintained by <a href="https://github.com/GeorgeArgyrakis">GeorgeArgyrakis</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
